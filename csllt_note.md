@@ -1,4 +1,4 @@
-## Lecture 2
+## Lecture 1
 ### Register
 - **Memory slot in the CPU**
 - **Slot is permanent, data is temporary**
