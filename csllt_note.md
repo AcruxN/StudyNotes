@@ -1,5 +1,31 @@
+# CSLLT NOTE
+
+## Table of Contents
+
+- [Lecture 1](#lecture-1)
+  - [Register](#register)
+  - [GPR (General purpose register) [User visible register]](#gpr-general-purpose-register-user-visible-register)
+  - [SPR (Special purpose register) [User invisible register]](#spr-special-purpose-register-user-invisible-register)
+  - [Steps for ASM programming](#steps-for-asm-programming)
+- [Lecture 2](#lecture-2)
+  - [Services](#services)
+  - [In a CPU](#in-a-cpu)
+  - [Segments Register](#segments-register)
+  - [Assembly coding, DOS APIs](#assembly-coding-dos-apis)
+  - [Pseudo-Ops](#pseudo-ops)
+  - [Assembly Example](#assembly-example)
+  - [Addressing Modes in 8086](#addressing-modes-in-8086)
+- [Lecture 3](#lecture-3)
+  - [Little Man Computer (LMC)](#little-man-computer-lmc)
+  - [Translator (System translator)](#translator-system-translator)
+  - [von Neumann Architecture Guidelines](#von-neumann-architecture-guidelines)
+  - [LMC Instruction Set](#lmc-instruction-set)
+
+
 ## Lecture 1
+
 ### Register
+
 - **Memory slot in the CPU**
 - **Slot is permanent, data is temporary**
 - **To hold and store values**
@@ -86,6 +112,7 @@
 ## Lecture 2
 
 ### Services
+
 - **Services** are called as predefined functions, which are created by computer manufacturers (Intel, AMD).
 - It facilitates communication between layers:
   - Hardware layer
@@ -95,10 +122,12 @@
 - **Registers** are mainly used to facilitate services.
 
 ### In a CPU
+
 - **CU (Control Unit)** - Control unit controls the activity of the CPU, makes synchronization available for other components.
 - **ALU (Arithmetic/Logical Unit)** - Perform arithmetic (+-) and logic (<>==).
 
 ### Segments Register
+
 - **B4 segment**
   - CS - Code Segments
   - SS - Stack Segment
@@ -109,6 +138,7 @@
   - GS - Microsoft's Extra Segment
 
 ### Assembly coding, DOS APIs
+
 ```assembly
 mov ah,02 ; Display character
 mov ah,09 ; Display string
@@ -117,16 +147,18 @@ mov ah,0ah ; String input
 ```
 
 ### Pseudo-Ops
+
 - EQU - Enables us to create constant
 - DB - Allows us to create a variable which contains a byte of data (8 bits)
 - DW - Allows us to create a variable which contains a word data (16 bits)
 - DD - Allows us to create a variable which contains two words (32 bits)
 - **Note**
- - int takes 2 byte
- - char takes 1 byte
- - float takes 4 byte
+- int takes 2 byte
+- char takes 1 byte
+- float takes 4 byte
 
 ### Assembly Example
+
 ```assembly
 .model small
 .stack 100h
@@ -145,11 +177,13 @@ The way of specifying data/operand to be operated by an instruction is known as 
 #### 11 Addressing Modes
 
 ##### Register Mode
-- Source and destination operand must be register 
+
+- Source and destination operand must be register
   - Example: `mov ax, bx`, `xor ax,dx`, `add al, bl`
 
 ##### Immediate Mode
-- The source operand can be 8 bit or 16 bit data, destination operand can never be immediate data 
+
+- The source operand can be 8 bit or 16 bit data, destination operand can never be immediate data
   - Example: `mov ax,2000`, `mov cl,0A`, `mov al,45`, `AND ax,000`
 
 ##### Direct Mode or Displacement Mode
@@ -171,22 +205,25 @@ The way of specifying data/operand to be operated by an instruction is known as 
 ##### Relative Mode
 
 ##### example
+
+```
 _________________________________
-mov 	  ah, 		02
+mov    ah,   02
  |         \             \
 operation  register     value
 _________________________________
-
-
+```
 
 ## Lecture 3
 
 ### Little Man Computer (LMC)
+
 - Known as computer simulator & computer emulator (toy computer)
 - Depicts & resembles operation of real CPU
 - CPU simlator that models a simple computer using the von Neumann architecture and memory use
 
 ### Translator (System translator)
+
 A set of programs that translate user instructions into machine understandable instructions:
 Translator must know the language of the program (programming language) and the language of the cpu (instruction set)
 
@@ -211,6 +248,7 @@ Translator must know the language of the program (programming language) and the 
    - Example: tlink, mlink, slink
 
 ### von Neumann Architecture Guidelines
+
 - Store program concepts
   - Allows computer to store data and instruction in its memory
 - Linear memory address
@@ -225,6 +263,7 @@ Translator must know the language of the program (programming language) and the 
   - CU (Control Unit) + ALU (Arithmetical Logical Unit) + MU (Memory Unit)
 
 ### LMC Instruction Set
+
 - Follows 3 decimal values
   - 1st decimal is Opcode (operation code)
   - 2nd decimal is operand (memory data / address)
@@ -242,41 +281,46 @@ Translator must know the language of the program (programming language) and the 
 - OPCODE 00: Stop / Halt
 
 #### Sample Addition
+
 ```LMC
-NO	OPCODE	NOTES
-00	901		1st Input
-01	350		Store it in 50th
-02	901		2nd Input
-03	150		ADD
-04	902		Display
-05	000		Stop
+NO OPCODE NOTES
+00 901  1st Input
+01 350  Store it in 50th
+02 901  2nd Input
+03 150  ADD
+04 902  Display
+05 000  Stop
 ```
 
 #### Sample Subtraction
+
 ```LMC
-NO	OPCODE	NOTES
-00	901		1st Input
-01	350		Store it in 50th
-02	901		2nd Input
-03	250		Substraction
-04	902		Display
-05	000		Stop
+NO OPCODE NOTES
+00 901  1st Input
+01 350  Store it in 50th
+02 901  2nd Input
+03 250  Substraction
+04 902  Display
+05 000  Stop
 ```
-**(2nd input - 1st input)**
+
+- **(2nd input - 1st input)**
 
 #### Sample If Statement
+
 ```LMC
-NO	OPCODE	NOTES
-00	901		1st Input
-01	350		Store it in 50th
-02	901		2nd Input
-03	380		Store it in 80th
-04	250		Substraction (b-a)=+-ve
-05	809 		Go to line 09
-06	550		Load the 50th	
-07	
+NO OPCODE NOTES
+00 901  1st Input
+01 350  Store it in 50th
+02 901  2nd Input
+03 380  Store it in 80th
+04 250  Substraction (b-a)=+-ve
+05 809   Go to line 09
+06 550  Load the 50th 
+07 
 08
-09	902		Display
-010	000		Stop
+09 902  Display
+010 000  Stop
 ```
-**(2nd input - 1st input)**
+
+- **(2nd input - 1st input)**
