@@ -20,7 +20,7 @@
   - [Translator (System translator)](#translator-system-translator)
   - [von Neumann Architecture Guidelines](#von-neumann-architecture-guidelines)
   - [LMC Instruction Set](#lmc-instruction-set)
-
+- [Lecture 4](#lecture-4)
 
 ## Lecture 1
 
@@ -176,39 +176,70 @@ The way of specifying data/operand to be operated by an instruction is known as 
 
 #### 11 Addressing Modes
 
-##### Register Mode
+##### 1. Register Mode
 
 - Source and destination operand must be register
-  - Example: `mov ax, bx`, `xor ax,dx`, `add al, bl`
+  - Example: `mov ax, bx`, `xor ax, dx`, `add al, bl`
 
-##### Immediate Mode
+##### 2. Immediate Mode
 
-- The source operand can be 8 bit or 16 bit data, destination operand can never be immediate data
-  - Example: `mov ax,2000`, `mov cl,0A`, `mov al,45`, `AND ax,000`
+- The source operand can be 8 bit or 16 bit data, destination operand can never be immediate data (Right operand = source operand)
+  - Example: `mov ax, 2000`, `mov cl, 0A`, `mov al, 45`, `AND ax, 000`
 
-##### Direct Mode or Displacement Mode
+##### 3. Direct Mode or Displacement Mode
 
-##### Register Indirect Mode
+- Effective address is directly given in the instruction as displacement (Source operand is address)
+  - Example: `mov ax, [disp]`, `mov ax, [0500]`
 
-##### Based Indexed Mode
+##### 4. Register Indirect Mode
 
-##### Indexed Mode
+- Effective address is in SI, DI, or BX (Source operand is register that holds address)
+  - Example: `mov ax, [DI]`, `mov al, [BX]`, `mov ax, [SI]`
 
-##### Based Mode
+##### 5. Based Indexed Mode
 
-##### Based Indexed Displacement Mode
+- Effective address is sum of base register and index register
+  - Base register: BX, BP
+  - Index register: SI, DI
+  - Physical memory address is calculated according to the base register
+    - Example: `mov al, [BP + SI]`, `mov ax, [BX + DI]`
 
-##### String Mode
+##### 6. Indexed Mode
 
-##### Input / Output Mode
+- Effective address is sum of index reister and displacement
+  - Example: `mov ax, [SI + 2000]`, `mov al, [DI + 3000]`
 
-##### Relative Mode
+##### 7. Based Mode
+
+- Effective address is sum of base register and displacement
+  - Example: `mov al, [BP + 0100]`
+
+##### 8. Based Indexed Displacement Mode
+
+- Effective address is sum of index register, base registern and displacement
+  - Example: `mov al, [SI + BP + 2000]`
+
+##### 9. String Mode
+
+- This addressing mode is related to string instruction.
+  In this the value of SI and DI are auto incremented and decremented depending upon the value of directional flag
+  - Example: `movs B` (byte moving 8 bits), `movs W` (word moving 16 bits)
+
+##### 10. Input / Output Mode
+
+- This addressing mode is related with input and output operations.
+  - Example: `IN A, 45`, `OUT A, 50`
+
+##### 11. Relative Mode
+
+- Effective address is calculated with reference to instruction pointer.
+  - Example: `JNZ 8 bit address` (JUMP IF NOT ZERO), `IP = IP + 8 bit address`
 
 ##### example
 
-```
+```assembly
 _________________________________
-mov    ah,   02
+mov    ah,             02
  |         \             \
 operation  register     value
 _________________________________
@@ -324,3 +355,63 @@ NO OPCODE NOTES
 ```
 
 - **(2nd input - 1st input)**
+
+## Lecture 4
+
+- *Adressing Modes will be in final exam*
+
+### Flow Control
+
+  1. **CMP** - Compare
+  2. **JE** - Jump if equal to
+  3. **JNE** - Jump if not equal to
+  4. **JA** - Jump if above
+  5. **JB** - Jump if below
+
+#### Loops
+
+```assembly
+.model small
+.stack 100h
+.code
+MAIN PROC
+  mov cx, 80   ; set counter to 80
+  mov ah,2     ; DOS function to display
+  mov dl,'*'   ; character to display
+
+top: int 21h  ; call dos interrupt
+  loop top ; repeat
+
+  mov ah, 4Ch  ; DOS terminate
+  int 21h      ; return to DOS
+MAIN ENDP
+end MAIN
+```
+
+#### Jumps
+
+- Conditional Jumps
+  - Jump statement which moves control to another part of the program depending on the **FLAG** value
+
+```assembly
+.model small
+.stack. 100h
+.code
+MAIN PROC
+  mov bl, 80   ;
+  mov ah,2     ;
+  mov dl,'*'   ;
+
+top: int 21h   ; DOS interrupt
+  dec bl       ; decrease BL by one
+  cmp bl, 0    ; check if BL is zero
+  jne top      ; repeat if not equal to zero
+
+  mov ah, 4Ch  ;
+  int 21h      ;
+MAIN ENDP
+end MAIN
+```
+
+- Unconditional Jumps
+  - Jump statement that moves control to another part of the program even **without FLAG** value
